@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Ayute ❤️</title>
+    <style>
+        :root {
+            --pink: #ffb7c5;
+            --red: #ff4d6d;
+            --gold: #d4af37;
+            --white: #fff5f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--white), var(--pink));
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #4a4a4a;
+        }
+
+        /* Floating Hearts Background */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            color: var(--red);
+            opacity: 0.6;
+            animation: float 5s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* Content Sections */
+        .container {
+            z-index: 10;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { color: var(--red); margin-bottom: 20px; }
+        p { font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px; }
+
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary { background: var(--red); color: white; }
+        .btn-secondary { background: var(--white); color: #4a4a4a; border: 1px solid var(--pink); }
+        
+        button:hover { transform: scale(1.1); }
+
+        #no-btn {
+            position: relative;
+            z-index: 100;
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            border-right: 3px solid var(--red);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 1px;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--red); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <div class="container">
+        <div id="section-1" class="section active">
+            <h1 class="typewriter">Hey Ayute ❤️</h1>
+            <p>I have something special to ask you...</p>
+            <button class="btn-primary" onclick="nextSection(2)">Continue 💫</button>
+        </div>
+
+        <div id="section-2" class="section">
+            <p id="story-text">From the day you came into my life...</p>
+            <button class="btn-primary" id="story-btn" onclick="progressStory()">Next ✨</button>
+        </div>
+
+        <div id="section-3" class="section">
+            <h1>Will you be mine forever, Ayute? 💍❤️</h1>
+            <div class="btn-container">
+                <button class="btn-primary" onclick="handleYes()">YES 💖</button>
+                <button class="btn-secondary" id="no-btn" onmouseover="moveNoButton()" onclick="handleNo()">NO 🙈</button>
+            </div>
+            <p id="no-message" style="margin-top: 20px; font-style: italic; display: none;"></p>
+        </div>
+
+        <div id="section-4" class="section">
+            <h2 id="follow-up-text">You just made me the happiest person alive 😭❤️</h2>
+            <div class="btn-container">
+                <button class="btn-primary" id="follow-up-btn" onclick="progressFollowUp()">YES 😘</button>
+            </div>
+        </div>
+
+        <div id="section-5" class="section">
+            <h1>I love you, Ayute ❤️</h1>
+            <p>This is just the beginning of our beautiful story.</p>
+            <div style="font-size: 3rem;">👩‍❤️‍👨</div>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.chosic.com/wp-content/uploads/2021/04/And-So-It-Begins-Inspired-By-Crush-Music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        // --- CONFIGURATION ---
+        const storyMessages = [
+            "Everything felt lighter, happier, warmer.",
+            "Every moment with you means the world to me.",
+            "And today... I want to ask you something important."
+        ];
+
+        const followUpQuestions = [
+            "Can I hold your hand forever?",
+            "Can I annoy you for life?",
+            "Can I love you more every single day?"
+        ];
+
+        let storyIndex = 0;
+        let followUpIndex = 0;
+        let noCount = 0;
+
+        // --- NAVIGATION ---
+        function nextSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section-${id}`).classList.add('active');
+        }
+
+        // --- STORY LOGIC ---
+        function progressStory() {
+            if (storyIndex < storyMessages.length) {
+                document.getElementById('story-text').innerText = storyMessages[storyIndex];
+                storyIndex++;
+            } else {
+                nextSection(3);
+            }
+        }
+
+        // --- PROPOSAL LOGIC ---
+        function handleYes() {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('bg-music').play().catch(e => console.log("Audio play blocked until interaction"));
+            nextSection(4);
+        }
+
+        function handleNo() {
+            noCount++;
+            const noMsg = document.getElementById('no-message');
+            noMsg.style.display = 'block';
+            
+            if (noCount === 1) {
+                noMsg.innerText = "Wait wait... think again 😌";
+            } else if (noCount === 2) {
+                noMsg.innerText = "Are you sure you want to say NO to unlimited love? 💕";
+            } else {
+                noMsg.innerText = "Okay okay... I'll still wait for you ❤️";
+                document.getElementById('no-btn').style.display = 'none';
+            }
+        }
+
+        function moveNoButton() {
+            if(noCount >= 3) return;
+            const btn = document.getElementById('no-btn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 20);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 20);
+            
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        // --- FOLLOW UP LOGIC ---
+        function progressFollowUp() {
+            if (followUpIndex < followUpQuestions.length) {
+                document.getElementById('follow-up-text').innerText = followUpQuestions[followUpIndex];
+                followUpIndex++;
+                confetti({ particleCount: 50, spread: 50, origin: { y: 0.8 } });
+            } else {
+                nextSection(5);
+            }
+        }
+
+        // --- BACKGROUND HEARTS ---
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            container.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHearts, 300);
+
+    </script>
+</body>
+</html>
