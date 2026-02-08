@@ -206,39 +206,45 @@
             }
         }
 
-        // --- PROPOSAL LOGIC ---
+       // --- PROPOSAL LOGIC ---
         function handleYes() {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            document.getElementById('bg-music').play().catch(e => console.log("Audio play blocked until interaction"));
+            document.getElementById('bg-music').play().catch(e => console.log("Audio play blocked"));
             nextSection(4);
         }
 
         function handleNo() {
             noCount++;
+            const noBtn = document.getElementById('no-btn');
+            const yesBtn = document.querySelector('button[onclick="handleYes()"]');
             const noMsg = document.getElementById('no-message');
-            noMsg.style.display = 'block';
             
+            noMsg.style.display = 'block';
+
+            // Shrink the NO button and Grow the YES button
+            let currentScale = 1 - (noCount * 0.2); // Shrinks by 20% each time
+            let yesScale = 1 + (noCount * 0.3);    // Grows by 30% each time
+            
+            if (currentScale < 0.2) {
+                noBtn.style.display = 'none'; // Hide it if it gets too tiny
+            } else {
+                noBtn.style.transform = `scale(${currentScale})`;
+                yesBtn.style.transform = `scale(${yesScale})`;
+            }
+
+            // Update playful text
             if (noCount === 1) {
                 noMsg.innerText = "Wait wait... think again 😌";
             } else if (noCount === 2) {
-                noMsg.innerText = "Are you sure you want to say NO to unlimited love? 💕";
+                noMsg.innerText = "Are you sure? I'll be very sad... 🥺";
+            } else if (noCount === 3) {
+                noMsg.innerText = "Look how big the YES button is now! Just click it! 💕";
             } else {
                 noMsg.innerText = "Okay okay... I'll still wait for you ❤️";
-                document.getElementById('no-btn').style.display = 'none';
             }
         }
 
-        function moveNoButton() {
-            if(noCount >= 3) return;
-            const btn = document.getElementById('no-btn');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 20);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 20);
-            
-            btn.style.position = 'fixed';
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
-        }
-
+        // Remove the moveNoButton function since we are shrinking it instead!
         // --- FOLLOW UP LOGIC ---
         function progressFollowUp() {
             if (followUpIndex < followUpQuestions.length) {
